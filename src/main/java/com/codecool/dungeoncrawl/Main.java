@@ -8,6 +8,7 @@ import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
@@ -23,6 +24,9 @@ public class Main extends Application {
     GraphicsContext context = canvas.getGraphicsContext2D();
     Label healthLabel = new Label();
 
+    Button button1 = new Button("Pick Up"); //Creating the button
+
+
     public static void main(String[] args) {
         launch(args);
     }
@@ -33,8 +37,12 @@ public class Main extends Application {
         ui.setPrefWidth(200);
         ui.setPadding(new Insets(10));
 
+        ui.add(button1,0, 1);           //Adding the button to the GridPane, The first parameter of the add() method is the component (node) to add to the GridPane.
+                                                //The second and third parameter of the add() method is the column index and row index of the cell in which the component should be displayed. Column and row indexes start from 0.
+
         ui.add(new Label("Health: "), 0, 0);
         ui.add(healthLabel, 1, 0);
+
 
         BorderPane borderPane = new BorderPane();
 
