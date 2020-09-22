@@ -11,11 +11,4 @@ public class Item extends Actor {
     public String getTileName() {
         return null;
     }
-
-//    @Override
-//    public Actor getItem(){
-//        System.out.println("helo");
-//        return super.actualItem;
-//    }
-
 }

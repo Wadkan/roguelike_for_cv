@@ -1,6 +1,7 @@
 package com.codecool.dungeoncrawl.logic.actors;
 
 import com.codecool.dungeoncrawl.logic.Cell;
+import com.codecool.dungeoncrawl.logic.CellType;
 import com.codecool.dungeoncrawl.logic.Drawable;
 
 public abstract class Actor implements Drawable {
@@ -37,7 +38,7 @@ public abstract class Actor implements Drawable {
         if (tileName == "skeleton") {   // if tile is a skeleton: FIGHT TODO: implement fight
             System.out.println("SKELETON");
         } else if (tileName == "sword" || tileName == "key") {   // if tile is an item (sward, key...): CAN PUT IT TODO put an item
-            System.out.println(tileName);
+            cell.setType(CellType.FLOOR);
         }
     }
 
@@ -57,9 +58,9 @@ public abstract class Actor implements Drawable {
         return cell.getY();
     }
 
-    public Actor getItem() {
+    public Item getItem() {
         if (actualItem instanceof Item) {
-            return actualItem;
+            return (Item) actualItem;
         } else
             return null;
     }

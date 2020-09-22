@@ -3,13 +3,14 @@ package com.codecool.dungeoncrawl.logic;
 import com.codecool.dungeoncrawl.logic.actors.Item;
 import com.codecool.dungeoncrawl.logic.actors.Sword;
 
+import java.util.LinkedList;
 import java.util.List;
 
 public class Inventory {
     private List<Item> itemList;
 
     public Inventory() {
-        itemList = null;
+        itemList = new LinkedList<>();
     }
 
     public List<Item> getItemList() {
@@ -17,11 +18,16 @@ public class Inventory {
     }
 
     public void addItemToInventory(Item item) {
-        this.itemList.add(item);
+        if (item != null) {
+            this.itemList.add(item);
+        }
     }
 
-    public int getItemsNumber() {
-//        return this.itemList.size();
-        return 123;
+    public Integer getItemsNumber() {
+        try {
+            return this.itemList.size();
+        } catch (Exception ignored) {
+        }
+        return null;
     }
 }

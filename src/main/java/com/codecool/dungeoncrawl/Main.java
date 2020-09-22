@@ -1,10 +1,8 @@
 package com.codecool.dungeoncrawl;
 
-import com.codecool.dungeoncrawl.logic.Cell;
-import com.codecool.dungeoncrawl.logic.GameMap;
-import com.codecool.dungeoncrawl.logic.Inventory;
-import com.codecool.dungeoncrawl.logic.MapLoader;
+import com.codecool.dungeoncrawl.logic.*;
 import com.codecool.dungeoncrawl.logic.actors.Actor;
+import com.codecool.dungeoncrawl.logic.actors.Item;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -21,6 +19,7 @@ import javafx.stage.Stage;
 public class Main extends Application {
     GameMap map = MapLoader.loadMap();
     Inventory itemList = new Inventory();
+    boolean ifMoved = false;
     Canvas canvas = new Canvas(
             map.getWidth() * Tiles.TILE_WIDTH,
             map.getHeight() * Tiles.TILE_WIDTH);
@@ -46,14 +45,17 @@ public class Main extends Application {
         BorderPane borderPane = new BorderPane();
 
         pickUpInventoryItem = new Button("Pick up item");
-        pickUpInventoryItem.setOnAction(actionEvent ->  {
-            Actor itemToPickUp = this.map.getPlayer().getCell().getActor().getItem();
-            System.out.println(itemToPickUp);
+        pickUpInventoryItem.setOnAction(actionEvent -> {
+            Item itemToPickUp = this.map.getPlayer().getCell().getActor().getItem();
+            if (ifMoved) {
+                ifMoved = false;
+                System.out.println(itemToPickUp);
+                itemList.addItemToInventory(itemToPickUp);
+                System.out.println(itemList.getItemsNumber());
+            }
             borderPane.requestFocus();
         });
         ui.add(pickUpInventoryItem, 1, 3);
-
-
 
         borderPane.setCenter(canvas);
         borderPane.setRight(ui);
@@ -71,6 +73,7 @@ public class Main extends Application {
     }
 
     private void onKeyPressed(KeyEvent keyEvent) {
+        ifMoved = true;
         switch (keyEvent.getCode()) {
             case UP:
                 map.getPlayer().move(0, -1);
