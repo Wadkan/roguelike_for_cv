@@ -37,11 +37,7 @@ public class Main extends Application {
         GridPane ui = new GridPane();
         ui.setPrefWidth(200);
         ui.setPadding(new Insets(10));
-        Button pickUp = new Button("Pick Up"); //Creating the button
 
-         //ui.add(pickUp, 0, 1);
-                                                        //Adding the button to the GridPane, The first parameter of the add() method is the component (node) to add to the GridPane.
-                                                        //The second and third parameter of the add() method is the column index and row index of the cell in which the component should be displayed. Column and row indexes start from 0.
         ui.add(new Label("Health: "), 0, 0);
         ui.add(healthLabel, 1, 0);
 
