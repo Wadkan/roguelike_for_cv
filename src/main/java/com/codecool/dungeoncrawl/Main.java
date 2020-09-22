@@ -41,6 +41,7 @@ public class Main extends Application {
         ui.add(new Label("Health: "), 0, 0);
         ui.add(healthLabel, 1, 0);
         ui.add(new Label("Inventory items: "), 0, 1);
+        ui.add(inventoryLabel, 1, 1);
 
         BorderPane borderPane = new BorderPane();
 
@@ -49,9 +50,8 @@ public class Main extends Application {
             Item itemToPickUp = this.map.getPlayer().getCell().getActor().getItem();
             if (ifMoved) {
                 ifMoved = false;
-                System.out.println(itemToPickUp);
                 itemList.addItemToInventory(itemToPickUp);
-                System.out.println(itemList.getItemsNumber());
+                refresh();
             }
             borderPane.requestFocus();
         });
@@ -108,7 +108,6 @@ public class Main extends Application {
             }
         }
         healthLabel.setText("" + map.getPlayer().getHealth());
-        inventoryLabel.setText("" + itemList.getItemsNumber());
         inventoryLabel.setText("" + itemList.getItemsNumber());
     }
 }
