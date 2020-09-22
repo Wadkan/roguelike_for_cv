@@ -3,6 +3,7 @@ package com.codecool.dungeoncrawl.logic;
 import com.codecool.dungeoncrawl.logic.actors.Item;
 import com.codecool.dungeoncrawl.logic.actors.Sword;
 
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -13,7 +14,7 @@ public class Inventory {
         itemList = new LinkedList<>();
     }
 
-    public List<Item> getItemList() {
+    public List<Item> getItems() {
         return itemList;
     }
 
@@ -29,5 +30,22 @@ public class Inventory {
         } catch (Exception ignored) {
         }
         return null;
+    }
+
+    public String getItemsList() {
+        StringBuilder list = new StringBuilder();
+        for (Item item : this.itemList) {
+            list.append(item.getTileName());
+            list.append("\n");
+        }
+        return list.toString();
+    }
+
+    public int getSwordsNumber() {
+        return Collections.frequency(this.itemList, "sword");
+    }
+
+    public int getKeysNumber() {
+        return Collections.frequency(this.itemList, "key");
     }
 }

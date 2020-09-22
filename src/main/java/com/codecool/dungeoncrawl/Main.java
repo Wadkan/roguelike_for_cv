@@ -10,11 +10,13 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import org.w3c.dom.Text;
 
 public class Main extends Application {
     GameMap map = MapLoader.loadMap();
@@ -26,6 +28,7 @@ public class Main extends Application {
     GraphicsContext context = canvas.getGraphicsContext2D();
     Label healthLabel = new Label();
     Label inventoryLabel = new Label();
+    TextArea inventoryList = new TextArea();
     Button pickUpInventoryItem;
 
     public static void main(String[] args) {
@@ -33,7 +36,7 @@ public class Main extends Application {
     }
 
     @Override
-    public void start(Stage primaryStage) throws Exception {
+    public void start(Stage primaryStage) {
         GridPane ui = new GridPane();
         ui.setPrefWidth(200);
         ui.setPadding(new Insets(10));
@@ -42,6 +45,8 @@ public class Main extends Application {
         ui.add(healthLabel, 1, 0);
         ui.add(new Label("Inventory items: "), 0, 1);
         ui.add(inventoryLabel, 1, 1);
+        ui.add(inventoryList, 0, 2);
+        inventoryList.setPrefSize(30,150);
 
         BorderPane borderPane = new BorderPane();
 
@@ -51,11 +56,12 @@ public class Main extends Application {
             if (ifMoved) {
                 ifMoved = false;
                 itemList.addItemToInventory(itemToPickUp);
+                inventoryList.setText(itemList.getItemsList());
                 refresh();
             }
             borderPane.requestFocus();
         });
-        ui.add(pickUpInventoryItem, 1, 3);
+        ui.add(pickUpInventoryItem, 0, 10);
 
         borderPane.setCenter(canvas);
         borderPane.setRight(ui);
@@ -65,10 +71,10 @@ public class Main extends Application {
         refresh();
 
         scene.setOnKeyPressed(this::onKeyPressed);
-        borderPane.requestFocus();
 
         primaryStage.setTitle("Dungeon Crawl");
         primaryStage.show();
+        borderPane.requestFocus();
 
     }
 
