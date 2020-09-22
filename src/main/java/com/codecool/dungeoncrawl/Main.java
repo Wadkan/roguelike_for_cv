@@ -15,8 +15,8 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import org.w3c.dom.Text;
 
 public class Main extends Application {
     GameMap map = MapLoader.loadMap();
@@ -28,7 +28,7 @@ public class Main extends Application {
     GraphicsContext context = canvas.getGraphicsContext2D();
     Label healthLabel = new Label();
     Label inventoryLabel = new Label();
-    TextArea inventoryList = new TextArea();
+    Text inventoryList = new Text();
     Button pickUpInventoryItem;
 
     public static void main(String[] args) {
@@ -46,7 +46,6 @@ public class Main extends Application {
         ui.add(new Label("Inventory items: "), 0, 1);
         ui.add(inventoryLabel, 1, 1);
         ui.add(inventoryList, 0, 2);
-        inventoryList.setPrefSize(30,150);
 
         BorderPane borderPane = new BorderPane();
 
@@ -57,6 +56,7 @@ public class Main extends Application {
                 ifMoved = false;
                 itemList.addItemToInventory(itemToPickUp);
                 inventoryList.setText(itemList.getItemsList());
+                this.map.getPlayer().getCell().setType(CellType.FLOOR);     // remove the item after pick up
                 refresh();
             }
             borderPane.requestFocus();

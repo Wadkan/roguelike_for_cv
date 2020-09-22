@@ -29,17 +29,17 @@ public abstract class Actor implements Drawable {
         }
 
         // if tile is a wall, do not move
-        if (nextCell.getTileName() != "wall") {
+        if (!nextCell.getTileName().equals("wall")) {
             cell.setActor(null);
             nextCell.setActor(this);
             cell = nextCell;
         }
 
-        if (tileName == "skeleton") {   // if tile is a skeleton: FIGHT TODO: implement fight
-            System.out.println("SKELETON");
-        } else if (tileName == "sword" || tileName == "key") {   // if tile is an item (sward, key...): CAN PUT IT TODO put an item
-            cell.setType(CellType.FLOOR);
-        }
+//        if (tileName.equals("skeleton")) {   // if tile is a skeleton: FIGHT TODO: implement fight
+//            System.out.println("SKELETON");
+//        } else if (tileName == "sword" || tileName == "key") {   // if tile is an item (sward, key...): CAN PUT IT TODO put an item
+//            cell.setType(CellType.FLOOR);
+//        }
     }
 
     public int getHealth() {
