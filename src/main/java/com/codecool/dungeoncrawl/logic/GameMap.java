@@ -8,6 +8,7 @@ public class GameMap {
     private Cell[][] cells;
 
     private Player player;
+    private int[] doorPosition;
 
     public GameMap(int width, int height, CellType defaultCellType) {
         this.width = width;
@@ -38,5 +39,13 @@ public class GameMap {
 
     public int getHeight() {
         return height;
+    }
+
+    public void setDoorPosition(int x, int y) {
+        this.doorPosition = new int[]{x, y};
+    }
+
+    public int[] getDoorPosition() {
+        return this.doorPosition;
     }
 }
