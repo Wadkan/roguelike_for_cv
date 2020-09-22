@@ -12,4 +12,10 @@ public class Item extends Actor {
         return null;
     }
 
+//    @Override
+//    public Actor getItem(){
+//        System.out.println("helo");
+//        return super.actualItem;
+//    }
+
 }

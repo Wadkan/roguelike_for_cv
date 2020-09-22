@@ -6,7 +6,7 @@ import com.codecool.dungeoncrawl.logic.Drawable;
 public abstract class Actor implements Drawable {
     private Cell cell;
     private int health = 10;
-    private Item actualItem = null;
+    protected Actor actualItem;
 
     public Actor(Cell cell) {
         this.cell = cell;
@@ -16,11 +16,13 @@ public abstract class Actor implements Drawable {
     public void move(int dx, int dy) {
         Cell nextCell = cell.getNeighbor(dx, dy);
         String tileName = "";
+        actualItem = null;
 
         try {
             // check tile name: skeleton, sword, key...
             tileName = nextCell.getActor().getTileName();
-//            actualItem = nextCell.getActor();
+            this.actualItem = nextCell.getActor();
+            System.out.println("act: " + actualItem);
             System.out.println(tileName);
         } catch (Exception ignored) {
         }
@@ -53,6 +55,13 @@ public abstract class Actor implements Drawable {
 
     public int getY() {
         return cell.getY();
+    }
+
+    public Actor getItem() {
+        if (actualItem instanceof Item) {
+            return actualItem;
+        } else
+            return null;
     }
 
 }

@@ -4,6 +4,7 @@ import com.codecool.dungeoncrawl.logic.Cell;
 import com.codecool.dungeoncrawl.logic.GameMap;
 import com.codecool.dungeoncrawl.logic.Inventory;
 import com.codecool.dungeoncrawl.logic.MapLoader;
+import com.codecool.dungeoncrawl.logic.actors.Actor;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -20,7 +21,6 @@ import javafx.stage.Stage;
 public class Main extends Application {
     GameMap map = MapLoader.loadMap();
     Inventory itemList = new Inventory();
-    String actualItem;
     Canvas canvas = new Canvas(
             map.getWidth() * Tiles.TILE_WIDTH,
             map.getHeight() * Tiles.TILE_WIDTH);
@@ -28,7 +28,6 @@ public class Main extends Application {
     Label healthLabel = new Label();
     Label inventoryLabel = new Label();
     Button pickUpInventoryItem;
-    Button pickUpInventoryItem2;
 
     public static void main(String[] args) {
         launch(args);
@@ -44,17 +43,17 @@ public class Main extends Application {
         ui.add(healthLabel, 1, 0);
         ui.add(new Label("Inventory items: "), 0, 1);
 
-        pickUpInventoryItem = new Button("Pick up item");
-        pickUpInventoryItem2 = new Button("Pick up item");
-        ui.add(pickUpInventoryItem, 1, 2);
-        ui.add(pickUpInventoryItem2, 1, 3);
-//        pickUpInventoryItem.setOnAction(actionEvent ->  {
-//            System.out.println("button pressed");
-//        });
-//        ui.add(pickUpInventoryItem, 1, 3);
-
-
         BorderPane borderPane = new BorderPane();
+
+        pickUpInventoryItem = new Button("Pick up item");
+        pickUpInventoryItem.setOnAction(actionEvent ->  {
+            Actor itemToPickUp = this.map.getPlayer().getCell().getActor().getItem();
+            System.out.println(itemToPickUp);
+            borderPane.requestFocus();
+        });
+        ui.add(pickUpInventoryItem, 1, 3);
+
+
 
         borderPane.setCenter(canvas);
         borderPane.setRight(ui);
@@ -72,7 +71,6 @@ public class Main extends Application {
     }
 
     private void onKeyPressed(KeyEvent keyEvent) {
-        String actualItem;
         switch (keyEvent.getCode()) {
             case UP:
                 map.getPlayer().move(0, -1);
