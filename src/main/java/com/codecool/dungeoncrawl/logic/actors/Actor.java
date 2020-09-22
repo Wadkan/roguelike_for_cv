@@ -14,20 +14,26 @@ public abstract class Actor implements Drawable {
 
     public void move(int dx, int dy) {
         Cell nextCell = cell.getNeighbor(dx, dy);
-        boolean ifMonster = false;
+        String tileName = "";
 
         try {
-            ifMonster = nextCell.getActor().toString() != null;
-
+            // check tile name: skeleton, sword, key...
+            tileName = nextCell.getActor().getTileName();
+//            System.out.println(tileName);
         } catch (Exception ignored) {
         }
 
-        System.out.println(nextCell.getActor());
-
-        if (nextCell.getTileName() != "wall" && !ifMonster) {
+        // if tile is a wall, do not move
+        if (nextCell.getTileName() != "wall") {
             cell.setActor(null);
             nextCell.setActor(this);
             cell = nextCell;
+        }
+
+        if (tileName == "skeleton") {   // if tile is a skeleton: FIGHT TODO: implement fight
+            System.out.println("SKELETON");
+        } else if (tileName == "sword" || tileName == "key") {   // if tile is an item (sward, key...): CAN PUT IT TODO put an item
+            System.out.println(tileName);
         }
     }
 
