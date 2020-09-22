@@ -75,13 +75,11 @@ public class Main extends Application {
         primaryStage.setScene(scene);
         refresh();
 
-
         scene.setOnKeyPressed(this::onKeyPressed);
 
         primaryStage.setTitle("Dungeon Crawl");
         primaryStage.show();
         borderPane.requestFocus();
-
     }
 
     private void onKeyPressed(KeyEvent keyEvent) {
@@ -107,7 +105,6 @@ public class Main extends Application {
     }
 
     private void refresh() {
-        System.out.println(this.map.getPlayer().getIfStepIntoTheDoor());    // TODO load the new track
         context.setFill(Color.BLACK);
         context.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
         for (int x = 0; x < map.getWidth(); x++) {
@@ -122,5 +119,9 @@ public class Main extends Application {
         }
         healthLabel.setText("" + map.getPlayer().getHealth());
         inventoryLabel.setText("" + inventory.getItemsNumber());
+
+        if (this.map.getPlayer().getIfStepIntoTheDoor()) {  // TODO load the new track
+            System.out.println("STEP OUT");
+        }
     }
 }
