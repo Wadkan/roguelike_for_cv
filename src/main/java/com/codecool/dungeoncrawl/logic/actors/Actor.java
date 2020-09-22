@@ -6,6 +6,7 @@ import com.codecool.dungeoncrawl.logic.Drawable;
 public abstract class Actor implements Drawable {
     private Cell cell;
     private int health = 10;
+    private Item actualItem = null;
 
     public Actor(Cell cell) {
         this.cell = cell;
@@ -19,7 +20,8 @@ public abstract class Actor implements Drawable {
         try {
             // check tile name: skeleton, sword, key...
             tileName = nextCell.getActor().getTileName();
-//            System.out.println(tileName);
+//            actualItem = nextCell.getActor();
+            System.out.println(tileName);
         } catch (Exception ignored) {
         }
 

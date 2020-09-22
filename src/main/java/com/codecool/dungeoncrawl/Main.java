@@ -9,6 +9,7 @@ import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
@@ -19,13 +20,15 @@ import javafx.stage.Stage;
 public class Main extends Application {
     GameMap map = MapLoader.loadMap();
     Inventory itemList = new Inventory();
+    String actualItem;
     Canvas canvas = new Canvas(
             map.getWidth() * Tiles.TILE_WIDTH,
             map.getHeight() * Tiles.TILE_WIDTH);
     GraphicsContext context = canvas.getGraphicsContext2D();
     Label healthLabel = new Label();
     Label inventoryLabel = new Label();
-
+    Button pickUpInventoryItem;
+    Button pickUpInventoryItem2;
 
     public static void main(String[] args) {
         launch(args);
@@ -40,7 +43,16 @@ public class Main extends Application {
         ui.add(new Label("Health: "), 0, 0);
         ui.add(healthLabel, 1, 0);
         ui.add(new Label("Inventory items: "), 0, 1);
-        ui.add(inventoryLabel, 1, 1);
+
+        pickUpInventoryItem = new Button("Pick up item");
+        pickUpInventoryItem2 = new Button("Pick up item");
+        ui.add(pickUpInventoryItem, 1, 2);
+        ui.add(pickUpInventoryItem2, 1, 3);
+//        pickUpInventoryItem.setOnAction(actionEvent ->  {
+//            System.out.println("button pressed");
+//        });
+//        ui.add(pickUpInventoryItem, 1, 3);
+
 
         BorderPane borderPane = new BorderPane();
 
@@ -52,12 +64,15 @@ public class Main extends Application {
         refresh();
 
         scene.setOnKeyPressed(this::onKeyPressed);
+        borderPane.requestFocus();
 
         primaryStage.setTitle("Dungeon Crawl");
         primaryStage.show();
+
     }
 
     private void onKeyPressed(KeyEvent keyEvent) {
+        String actualItem;
         switch (keyEvent.getCode()) {
             case UP:
                 map.getPlayer().move(0, -1);
@@ -92,6 +107,7 @@ public class Main extends Application {
             }
         }
         healthLabel.setText("" + map.getPlayer().getHealth());
+        inventoryLabel.setText("" + itemList.getItemsNumber());
         inventoryLabel.setText("" + itemList.getItemsNumber());
     }
 }

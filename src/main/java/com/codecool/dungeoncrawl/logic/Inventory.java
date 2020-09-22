@@ -16,12 +16,12 @@ public class Inventory {
         return itemList;
     }
 
-    public void setItemList(Item item) {
+    public void addItemToInventory(Item item) {
         this.itemList.add(item);
     }
 
     public int getItemsNumber() {
 //        return this.itemList.size();
-        return 0123;
+        return 123;
     }
 }
