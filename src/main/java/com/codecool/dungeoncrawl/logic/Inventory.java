@@ -1,13 +1,14 @@
 package com.codecool.dungeoncrawl.logic;
 
 import com.codecool.dungeoncrawl.logic.actors.Item;
+import com.codecool.dungeoncrawl.logic.actors.Sword;
 
 import java.util.List;
 
 public class Inventory {
     private List<Item> itemList;
 
-    public Inventory(Item item) {
+    public Inventory() {
         itemList = null;
     }
 
@@ -20,6 +21,7 @@ public class Inventory {
     }
 
     public int getItemsNumber() {
-        return this.itemList.size();
+//        return this.itemList.size();
+        return 0123;
     }
 }
