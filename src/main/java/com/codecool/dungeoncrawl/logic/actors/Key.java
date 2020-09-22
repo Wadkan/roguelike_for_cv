@@ -2,15 +2,13 @@ package com.codecool.dungeoncrawl.logic.actors;
 
 import com.codecool.dungeoncrawl.logic.Cell;
 
-import java.util.List;
-
-public class Skeleton extends Actor {
-    public Skeleton(Cell cell) {
+public class Key extends Item {
+    public Key(Cell cell) {
         super(cell);
     }
 
     @Override
     public String getTileName() {
-        return "skeleton";
+        return "key";
     }
 }
