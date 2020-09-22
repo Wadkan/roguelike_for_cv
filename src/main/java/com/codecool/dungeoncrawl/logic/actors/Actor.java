@@ -22,6 +22,8 @@ public abstract class Actor implements Drawable {
         } catch (Exception ignored) {
         }
 
+        System.out.println(nextCell.getActor());
+
         if (nextCell.getTileName() != "wall" && !ifMonster) {
             cell.setActor(null);
             nextCell.setActor(this);
@@ -44,4 +46,5 @@ public abstract class Actor implements Drawable {
     public int getY() {
         return cell.getY();
     }
+
 }
