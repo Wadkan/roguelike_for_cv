@@ -8,6 +8,7 @@ public abstract class Actor implements Drawable {
     private Cell cell;
     private int health = 10;
     protected Actor actualItem;
+    private boolean ifStepIntoTheDoor = false;
 
     public Actor(Cell cell) {
         this.cell = cell;
@@ -26,10 +27,15 @@ public abstract class Actor implements Drawable {
         }
 
         // if tile is a wall, do not move
-        if (!nextCell.getTileName().equals("wall")) {
+        String nextCellTitle = nextCell.getTileName();
+        if (!nextCellTitle.equals("wall") && !nextCellTitle.equals("closedDoor")) {
             cell.setActor(null);
             nextCell.setActor(this);
             cell = nextCell;
+        }
+        if (nextCellTitle.equals("openedDoor")) {
+            ifStepIntoTheDoor = true;
+            System.out.println("NEW MAP");
         }
 
 //        if (tileName.equals("skeleton")) {   // if tile is a skeleton: FIGHT TODO: implement fight
@@ -60,6 +66,10 @@ public abstract class Actor implements Drawable {
             return (Item) actualItem;
         } else
             return null;
+    }
+
+    public boolean getIfStepIntoTheDoor() {
+        return this.ifStepIntoTheDoor;
     }
 
 }
