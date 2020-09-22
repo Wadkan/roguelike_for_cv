@@ -31,6 +31,10 @@ public class MapLoader {
                         case '#':
                             cell.setType(CellType.WALL);
                             break;
+                        case 'c':
+                            cell.setType(CellType.CLOSED_DOOR);
+                            map.setDoorPosition(x, y);      // save the door position for change
+                            break;
                         case '.':
                             cell.setType(CellType.FLOOR);
                             break;
@@ -58,5 +62,4 @@ public class MapLoader {
         }
         return map;
     }
-
 }

@@ -1,8 +1,8 @@
 package com.codecool.dungeoncrawl;
 
 import com.codecool.dungeoncrawl.logic.*;
-import com.codecool.dungeoncrawl.logic.actors.Actor;
 import com.codecool.dungeoncrawl.logic.actors.Item;
+import com.codecool.dungeoncrawl.logic.actors.Key;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -10,7 +10,6 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
@@ -20,7 +19,8 @@ import javafx.stage.Stage;
 
 public class Main extends Application {
     GameMap map = MapLoader.loadMap();
-    Inventory itemList = new Inventory();
+    int[] doorPoz;
+    Inventory inventory = new Inventory();
     boolean ifMoved = false;
     Canvas canvas = new Canvas(
             map.getWidth() * Tiles.TILE_WIDTH,
@@ -54,9 +54,14 @@ public class Main extends Application {
             Item itemToPickUp = this.map.getPlayer().getCell().getActor().getItem();
             if (ifMoved) {
                 ifMoved = false;
-                itemList.addItemToInventory(itemToPickUp);
-                inventoryList.setText(itemList.getItemsList());
+                inventory.addItemToInventory(itemToPickUp);
+                inventoryList.setText(inventory.getItemsList());
                 this.map.getPlayer().getCell().setType(CellType.FLOOR);     // remove the item after pick up
+                System.out.println(inventory.getKeysNumber());
+                if (inventory.getKeysNumber() > 0) {
+                    doorPoz = map.getDoorPosition();
+                    this.map.getCell(doorPoz[0], doorPoz[1]).setType(CellType.OPENED_DOOR);     // change closed door to opened
+                }
                 refresh();
             }
             borderPane.requestFocus();
@@ -75,7 +80,6 @@ public class Main extends Application {
         primaryStage.setTitle("Dungeon Crawl");
         primaryStage.show();
         borderPane.requestFocus();
-
     }
 
     private void onKeyPressed(KeyEvent keyEvent) {
@@ -114,6 +118,10 @@ public class Main extends Application {
             }
         }
         healthLabel.setText("" + map.getPlayer().getHealth());
-        inventoryLabel.setText("" + itemList.getItemsNumber());
+        inventoryLabel.setText("" + inventory.getItemsNumber());
+
+        if (this.map.getPlayer().getIfStepIntoTheDoor()) {  // TODO load the new track
+            System.out.println("STEP OUT");
+        }
     }
 }
