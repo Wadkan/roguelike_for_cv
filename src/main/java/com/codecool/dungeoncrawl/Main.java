@@ -21,6 +21,7 @@ public class Main extends Application {
     GameMap map1 = MapLoader.loadMap("/map1.txt");
     GameMap map2 = MapLoader.loadMap("/map2.txt");
     GameMap map3 = MapLoader.loadMap("/map3.txt");
+    int level = 1;
 
     GameMap map = map1;
 
@@ -116,6 +117,19 @@ public class Main extends Application {
     }
 
     private void refresh() {
+        if (this.map.getPlayer().getIfStepIntoTheDoor()) {  // TODO load the new track
+            System.out.println("STEP OUT");
+            this.level++;
+            System.out.println(this.level);
+        }
+        if (this.level == 1) {
+            this.map = map1;
+        } else if (this.level == 2) {
+            this.map = map2;
+        } else if (this.level == 3) {
+            this.map = map3;
+        }
+
         context.setFill(Color.BLACK);
         context.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
         for (int x = 0; x < map.getWidth(); x++) {
@@ -131,10 +145,5 @@ public class Main extends Application {
         healthLabel.setText("" + map.getPlayer().getHealth());
         inventoryLabel.setText("" + inventory.getItemsNumber());
         totalDamage.setText("" + map.getPlayer().getDamage());
-
-
-        if (this.map.getPlayer().getIfStepIntoTheDoor()) {  // TODO load the new track
-            System.out.println("STEP OUT");
-        }
     }
 }

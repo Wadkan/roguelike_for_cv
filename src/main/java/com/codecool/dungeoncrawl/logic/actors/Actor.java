@@ -54,7 +54,8 @@ public abstract class Actor implements Drawable {
             System.out.println(tileName);
         }
 
-        if (nextCellTitle.equals("openedDoor")) {
+        System.out.println(nextCellTitle);
+        if (nextCellTitle.equals("openedDoor") || nextCellTitle.equals("stairs")) {
             ifStepIntoTheDoor = true;
             System.out.println("NEW MAP");
         }
