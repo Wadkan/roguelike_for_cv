@@ -7,6 +7,7 @@ public class Player extends Actor {
     public Player(Cell cell) {
         super(cell);
         setDamage(5);
+        setHealth(10);
     }
 
     public String getTileName() {

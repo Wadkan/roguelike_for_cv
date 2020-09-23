@@ -55,6 +55,11 @@ public class Main extends Application {
             if (ifMoved) {
                 ifMoved = false;
                 inventory.addItemToInventory(itemToPickUp);
+                if (itemToPickUp.getTileName().equals("sword")) {
+                    System.out.println("kakai");
+                    int playerDamage = this.map.getPlayer().getDamage();
+                    this.map.getPlayer().setDamage(playerDamage + 1);
+                }
                 inventoryList.setText(inventory.getItemsList());
                 this.map.getPlayer().getCell().setType(CellType.FLOOR);     // remove the item after pick up
                 System.out.println(inventory.getKeysNumber());
