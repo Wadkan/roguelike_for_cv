@@ -30,6 +30,7 @@ public class Main extends Application {
     Label inventoryLabel = new Label();
     Text inventoryList = new Text();
     Button pickUpInventoryItem;
+    Text totalDamage = new Text("" + map.getPlayer().getDamage());
 
     public static void main(String[] args) {
         launch(args);
@@ -43,9 +44,11 @@ public class Main extends Application {
 
         ui.add(new Label("Health: "), 0, 0);
         ui.add(healthLabel, 1, 0);
-        ui.add(new Label("Inventory items: "), 0, 1);
-        ui.add(inventoryLabel, 1, 1);
-        ui.add(inventoryList, 0, 2);
+        ui.add(new Label("Damage: "), 0, 1);
+        ui.add(totalDamage, 1, 1);
+        ui.add(new Label("Inventory items: "), 0, 2);
+        ui.add(inventoryLabel, 1, 2);
+        ui.add(inventoryList, 0, 3);
 
         BorderPane borderPane = new BorderPane();
 
@@ -55,9 +58,12 @@ public class Main extends Application {
             if (ifMoved) {
                 ifMoved = false;
                 inventory.addItemToInventory(itemToPickUp);
+                if (itemToPickUp.getTileName().equals("sword")) {
+                    int playerDamage = this.map.getPlayer().getDamage();
+                    this.map.getPlayer().setDamage(playerDamage + 1);
+                }
                 inventoryList.setText(inventory.getItemsList());
                 this.map.getPlayer().getCell().setType(CellType.FLOOR);     // remove the item after pick up
-                System.out.println(inventory.getKeysNumber());
                 if (inventory.getKeysNumber() > 0) {
                     doorPoz = map.getDoorPosition();
                     this.map.getCell(doorPoz[0], doorPoz[1]).setType(CellType.OPENED_DOOR);     // change closed door to opened
@@ -119,6 +125,8 @@ public class Main extends Application {
         }
         healthLabel.setText("" + map.getPlayer().getHealth());
         inventoryLabel.setText("" + inventory.getItemsNumber());
+        totalDamage.setText("" + map.getPlayer().getDamage());
+
 
         if (this.map.getPlayer().getIfStepIntoTheDoor()) {  // TODO load the new track
             System.out.println("STEP OUT");
