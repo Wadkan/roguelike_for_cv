@@ -32,7 +32,7 @@ public abstract class Actor implements Drawable {
         }
 
         // if tile is a wall, do not move
-        if (nextCell.getTileName() != "wall") {
+        if (nextCell.getTileName() != "wall" && tileName != "skeleton") {
             cell.setActor(null);
             nextCell.setActor(this);
             cell = nextCell;
@@ -42,6 +42,14 @@ public abstract class Actor implements Drawable {
             System.out.println("SKELETON");
             Attack a = new Attack(player, actualItem);
             a.fight();
+            if (a.getWinner() == player) {
+                cell.setActor(null);
+                nextCell.setActor(this);
+                cell = nextCell;
+            } else if (a.getWinner() == actualItem) {
+                cell.setActor(null);
+                System.out.println("GAME OVER");
+            }
         } else if (tileName == "sword" || tileName == "key") {   // if tile is an item (sward, key...): CAN PUT IT TODO put an item
             System.out.println(tileName);
         }

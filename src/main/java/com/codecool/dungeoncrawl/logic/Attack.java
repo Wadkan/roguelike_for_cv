@@ -6,6 +6,7 @@ import com.codecool.dungeoncrawl.logic.actors.Player;
 public class Attack {
     private Actor player;
     private Actor monster;
+    private Actor winner;
 
     public Attack(Actor player, Actor monster) {
         this.player = player;
@@ -21,12 +22,14 @@ public class Attack {
             System.out.println("Player deals " + playerDamage + " damage");
             if (isDead(monster)) {
                 System.out.println("Player wins!");
+                setWinner(player);
                 break;
             }
             player.decreaseHealthBy(monsterDamage);
             System.out.println("Monster deals " + monsterDamage + " damage");
             if (isDead(player)) {
                 System.out.println("Monster wins!");
+                setWinner(monster);
                 break;
             }
         }
@@ -34,5 +37,13 @@ public class Attack {
 
     public boolean isDead(Actor actor){
         return actor.getHealth() <= 0;
+    }
+
+    public void setWinner(Actor winner) {
+        this.winner = winner;
+    }
+
+    public Actor getWinner() {
+        return winner;
     }
 }
