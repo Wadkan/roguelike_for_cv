@@ -61,6 +61,9 @@ public class Main extends Application {
                 if (itemToPickUp.getTileName().equals("sword")) {
                     int playerDamage = this.map.getPlayer().getDamage();
                     this.map.getPlayer().setDamage(playerDamage + 1);
+                } else if (itemToPickUp.getTileName().equals("heart")) {
+                    int playerHealth = this.map.getPlayer().getHealth();
+                    this.map.getPlayer().setHealth(playerHealth + 2);
                 }
                 inventoryList.setText(inventory.getItemsList());
                 this.map.getPlayer().getCell().setType(CellType.FLOOR);     // remove the item after pick up
