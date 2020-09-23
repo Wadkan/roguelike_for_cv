@@ -1,10 +1,8 @@
 package com.codecool.dungeoncrawl;
 
-import com.codecool.dungeoncrawl.logic.Cell;
-import com.codecool.dungeoncrawl.logic.GameMap;
-import com.codecool.dungeoncrawl.logic.Inventory;
-import com.codecool.dungeoncrawl.logic.MapLoader;
-import com.codecool.dungeoncrawl.logic.actors.Actor;
+import com.codecool.dungeoncrawl.logic.*;
+import com.codecool.dungeoncrawl.logic.actors.Item;
+import com.codecool.dungeoncrawl.logic.actors.Key;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -16,17 +14,21 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 public class Main extends Application {
     GameMap map = MapLoader.loadMap();
-    Inventory itemList = new Inventory();
+    int[] doorPoz;
+    Inventory inventory = new Inventory();
+    boolean ifMoved = false;
     Canvas canvas = new Canvas(
             map.getWidth() * Tiles.TILE_WIDTH,
             map.getHeight() * Tiles.TILE_WIDTH);
     GraphicsContext context = canvas.getGraphicsContext2D();
     Label healthLabel = new Label();
     Label inventoryLabel = new Label();
+    Text inventoryList = new Text();
     Button pickUpInventoryItem;
 
     public static void main(String[] args) {
@@ -34,7 +36,7 @@ public class Main extends Application {
     }
 
     @Override
-    public void start(Stage primaryStage) throws Exception {
+    public void start(Stage primaryStage) {
         GridPane ui = new GridPane();
         ui.setPrefWidth(200);
         ui.setPadding(new Insets(10));
@@ -42,18 +44,29 @@ public class Main extends Application {
         ui.add(new Label("Health: "), 0, 0);
         ui.add(healthLabel, 1, 0);
         ui.add(new Label("Inventory items: "), 0, 1);
+        ui.add(inventoryLabel, 1, 1);
+        ui.add(inventoryList, 0, 2);
 
         BorderPane borderPane = new BorderPane();
 
         pickUpInventoryItem = new Button("Pick up item");
-        pickUpInventoryItem.setOnAction(actionEvent ->  {
-            Actor itemToPickUp = this.map.getPlayer().getCell().getActor().getItem();
-            System.out.println(itemToPickUp);
+        pickUpInventoryItem.setOnAction(actionEvent -> {
+            Item itemToPickUp = this.map.getPlayer().getCell().getActor().getItem();
+            if (ifMoved) {
+                ifMoved = false;
+                inventory.addItemToInventory(itemToPickUp);
+                inventoryList.setText(inventory.getItemsList());
+                this.map.getPlayer().getCell().setType(CellType.FLOOR);     // remove the item after pick up
+                System.out.println(inventory.getKeysNumber());
+                if (inventory.getKeysNumber() > 0) {
+                    doorPoz = map.getDoorPosition();
+                    this.map.getCell(doorPoz[0], doorPoz[1]).setType(CellType.OPENED_DOOR);     // change closed door to opened
+                }
+                refresh();
+            }
             borderPane.requestFocus();
         });
-        ui.add(pickUpInventoryItem, 1, 3);
-
-
+        ui.add(pickUpInventoryItem, 0, 10);
 
         borderPane.setCenter(canvas);
         borderPane.setRight(ui);
@@ -63,14 +76,14 @@ public class Main extends Application {
         refresh();
 
         scene.setOnKeyPressed(this::onKeyPressed);
-        borderPane.requestFocus();
 
         primaryStage.setTitle("Dungeon Crawl");
         primaryStage.show();
-
+        borderPane.requestFocus();
     }
 
     private void onKeyPressed(KeyEvent keyEvent) {
+        ifMoved = true;
         switch (keyEvent.getCode()) {
             case UP:
                 map.getPlayer().move(0, -1);
@@ -105,7 +118,10 @@ public class Main extends Application {
             }
         }
         healthLabel.setText("" + map.getPlayer().getHealth());
-        inventoryLabel.setText("" + itemList.getItemsNumber());
-        inventoryLabel.setText("" + itemList.getItemsNumber());
+        inventoryLabel.setText("" + inventory.getItemsNumber());
+
+        if (this.map.getPlayer().getIfStepIntoTheDoor()) {  // TODO load the new track
+            System.out.println("STEP OUT");
+        }
     }
 }

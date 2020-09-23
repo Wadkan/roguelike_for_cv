@@ -2,6 +2,7 @@ package com.codecool.dungeoncrawl.logic.actors;
 
 import com.codecool.dungeoncrawl.logic.Attack;
 import com.codecool.dungeoncrawl.logic.Cell;
+import com.codecool.dungeoncrawl.logic.CellType;
 import com.codecool.dungeoncrawl.logic.Drawable;
 
 public abstract class Actor implements Drawable {
@@ -10,6 +11,7 @@ public abstract class Actor implements Drawable {
     protected Actor actualItem;
     private Actor player;
     private int damage;
+    private boolean ifStepIntoTheDoor = false;
 
     public Actor(Cell cell) {
         this.cell = cell;
@@ -26,20 +28,18 @@ public abstract class Actor implements Drawable {
             // check tile name: skeleton, sword, key...
             tileName = nextCell.getActor().getTileName();
             this.actualItem = nextCell.getActor();
-            System.out.println("act: " + actualItem);
-            System.out.println(tileName);
         } catch (Exception ignored) {
         }
 
         // if tile is a wall, do not move
-        if (nextCell.getTileName() != "wall" && tileName != "skeleton") {
+        String nextCellTitle = nextCell.getTileName();
+        if (!nextCellTitle.equals("wall") && !nextCellTitle.equals("closedDoor") && !tileName.equals("skeleton")) {
             cell.setActor(null);
             nextCell.setActor(this);
             cell = nextCell;
         }
 
-        if (tileName == "skeleton") {   // if tile is a skeleton: FIGHT TODO: implement fight
-            System.out.println("SKELETON");
+        if (tileName.equals("skeleton")) {   // if tile is a skeleton: FIGHT TODO: implement fight
             Attack a = new Attack(player, actualItem);
             a.fight();
             if (a.getWinner() == player) {
@@ -50,8 +50,13 @@ public abstract class Actor implements Drawable {
                 cell.setActor(null);
                 System.out.println("GAME OVER");
             }
-        } else if (tileName == "sword" || tileName == "key") {   // if tile is an item (sward, key...): CAN PUT IT TODO put an item
+        } else if (tileName.equals("sword") || tileName.equals("key")) {   // if tile is an item (sward, key...): CAN PUT IT TODO put an item
             System.out.println(tileName);
+        }
+
+        if (nextCellTitle.equals("openedDoor")) {
+            ifStepIntoTheDoor = true;
+            System.out.println("NEW MAP");
         }
     }
 
@@ -71,11 +76,15 @@ public abstract class Actor implements Drawable {
         return cell.getY();
     }
 
-    public Actor getItem() {
+    public Item getItem() {
         if (actualItem instanceof Item) {
-            return actualItem;
+            return (Item) actualItem;
         } else
             return null;
+    }
+
+    public boolean getIfStepIntoTheDoor() {
+        return this.ifStepIntoTheDoor;
     }
 
     public void decreaseHealthBy(int damage) {
