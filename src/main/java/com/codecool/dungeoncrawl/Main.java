@@ -21,8 +21,8 @@ public class Main extends Application {
     GameMap map1 = MapLoader.loadMap("/map1.txt");
     GameMap map2 = MapLoader.loadMap("/map2.txt");
     GameMap map3 = MapLoader.loadMap("/map3.txt");
+    GameMap winner = MapLoader.loadMap("/winner.txt");
     int level = 1;
-
     GameMap map = map1;
 
     int[] doorPoz;
@@ -128,6 +128,9 @@ public class Main extends Application {
             this.map = map2;
         } else if (this.level == 3) {
             this.map = map3;
+        } else if (this.level > 3) {
+            System.out.println("WINNER");
+            this.map = winner;
         }
 
         context.setFill(Color.BLACK);
