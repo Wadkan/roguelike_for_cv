@@ -13,7 +13,8 @@ public enum CellType {
     TREE1("tree1"),
     TREE2("tree2"),
     TREE3("tree3"),
-    STAIRS("stairs");
+    STAIRS("stairs"),
+    BAT("bat");
 
     private final String tileName;
 
