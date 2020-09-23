@@ -71,6 +71,10 @@ public class MapLoader {
                             cell.setType(CellType.WALL);
                             new Tree3(cell);
                             break;
+                        case '$':
+                            cell.setType(CellType.STAIRS);
+                            new Stairs(cell);
+                            break;
                         default:
                             throw new RuntimeException("Unrecognized character: '" + line.charAt(x) + "'");
                     }

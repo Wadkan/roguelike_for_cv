@@ -12,7 +12,8 @@ public enum CellType {
     BRIDGE("bridge"),
     TREE1("tree1"),
     TREE2("tree2"),
-    TREE3("tree3");
+    TREE3("tree3"),
+    STAIRS("stairs");
 
     private final String tileName;
 
