@@ -15,12 +15,16 @@ public class Attack {
     public void fight() {
         System.out.println("LET THE FIGHT BEGIN!");
         while (true) {
-            monster.decreaseHealthBy(player.getDamage());
+            int playerDamage = player.getDamage();
+            int monsterDamage = monster.getDamage();
+            monster.decreaseHealthBy(playerDamage);
+            System.out.println("Player deals " + playerDamage + " damage");
             if (isDead(monster)) {
                 System.out.println("Player wins!");
                 break;
             }
-            player.decreaseHealthBy(monster.getDamage());
+            player.decreaseHealthBy(monsterDamage);
+            System.out.println("Monster deals " + monsterDamage + " damage");
             if (isDead(player)) {
                 System.out.println("Monster wins!");
                 break;
