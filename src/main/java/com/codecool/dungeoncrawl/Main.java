@@ -18,7 +18,12 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 public class Main extends Application {
-    GameMap map = MapLoader.loadMap();
+    GameMap map1 = MapLoader.loadMap("/map1.txt");
+    GameMap map2 = MapLoader.loadMap("/map2.txt");
+    GameMap map3 = MapLoader.loadMap("/map3.txt");
+
+    GameMap map = map1;
+
     int[] doorPoz;
     Inventory inventory = new Inventory();
     boolean ifMoved = false;
