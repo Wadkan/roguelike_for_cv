@@ -24,6 +24,13 @@ public class Main extends Application {
     int level = 1;
     GameMap map = map1;
 
+    // for map moving
+    int showFromX = this.map.getPlayer().getX();
+    int showFromY = this.map.getPlayer().getY();
+    int rangeY = 10;
+    int playerX = this.map.getPlayer().getX();
+    int playerY = this.map.getPlayer().getY();
+
     int[] doorPoz;
     Inventory inventory = new Inventory();
     boolean ifMoved = false;
@@ -94,16 +101,30 @@ public class Main extends Application {
     }
 
     private void onKeyPressed(KeyEvent keyEvent) {
+        // moving the map
+        playerX = this.map.getPlayer().getX();
+        playerY = this.map.getPlayer().getY();
+
         ifMoved = true;
         switch (keyEvent.getCode()) {
             case UP:
                 map.getPlayer().move(0, -1);
+
+                if (rangeY / 2 < playerY && playerY < map.getHeight() - rangeY / 2 + 1) {
+                    showFromY--;
+                }
                 refresh();
                 break;
             case DOWN:
                 map.getPlayer().move(0, 1);
+
+                if (rangeY / 2 < playerY && playerY < map.getHeight() - rangeY / 2 + 1) {
+                    showFromY++;
+                }
                 refresh();
                 break;
+
+
             case LEFT:
                 map.getPlayer().move(-1, 0);
                 refresh();
@@ -113,21 +134,26 @@ public class Main extends Application {
                 refresh();
                 break;
         }
+
+        System.out.println("----");
+        System.out.println("rangeY = " + rangeY);
+        System.out.println("playerY = " + playerY);
+        System.out.println("showFromY = " + showFromY);
+        System.out.println("mapHeight = " + (map.getHeight()));
     }
 
     private void refresh() {
         if (this.map.getPlayer().getIfStepIntoTheDoor()) {  // TODO load the new track
             System.out.println("STEP OUT");
             this.level++;
-            System.out.println(this.level);
+            showFromX = this.map.getPlayer().getX();
+            showFromY = this.map.getPlayer().getY();
         }
+
         if (this.level == 1) {
             this.map = map1;
         } else if (this.level == 2) {
             this.map = map2;
-            this.canvas.setHeight(map.getHeight() * Tiles.TILE_WIDTH);
-            this.canvas.setWidth(map.getWidth() * Tiles.TILE_WIDTH);
-            this.context = canvas.getGraphicsContext2D();
         } else if (this.level == 3) {
             this.map = map3;
         } else if (this.level > 3) {
@@ -135,15 +161,23 @@ public class Main extends Application {
             this.map = winner;
         }
 
+        int widthInPixel = map.getWidth() * Tiles.TILE_WIDTH;
+        int heightInPixel = (rangeY) * Tiles.TILE_WIDTH;
+
+        canvas.setWidth(widthInPixel);
+        canvas.setHeight(heightInPixel);
+
+//        this.context = canvas.getGraphicsContext2D();
+
         context.setFill(Color.BLACK);
         context.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
         for (int x = 0; x < map.getWidth(); x++) {
             for (int y = 0; y < map.getHeight(); y++) {
                 Cell cell = map.getCell(x, y);
                 if (cell.getActor() != null) {
-                    Tiles.drawTile(context, cell.getActor(), x, y);
+                    Tiles.drawTile(context, cell.getActor(), x, y - showFromY + rangeY / 2);
                 } else {
-                    Tiles.drawTile(context, cell, x, y);
+                    Tiles.drawTile(context, cell, x, y - showFromY + rangeY / 2);
                 }
             }
         }

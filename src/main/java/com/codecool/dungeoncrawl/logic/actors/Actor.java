@@ -51,10 +51,10 @@ public abstract class Actor implements Drawable {
                 System.out.println("GAME OVER");
             }
         } else if (tileName.equals("sword") || tileName.equals("key")) {   // if tile is an item (sward, key...): CAN PUT IT TODO put an item
-            System.out.println(tileName);
+//            System.out.println(tileName);
         }
 
-        System.out.println(nextCellTitle);
+//        System.out.println(nextCellTitle);
         if (nextCellTitle.equals("openedDoor") || nextCellTitle.equals("stairs")) {
             ifStepIntoTheDoor = true;
             System.out.println("NEW MAP");
