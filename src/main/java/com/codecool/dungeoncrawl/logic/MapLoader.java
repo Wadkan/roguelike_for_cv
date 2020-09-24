@@ -79,6 +79,10 @@ public class MapLoader {
                             cell.setType(CellType.FLOOR);
                             new Bat(cell);
                             break;
+                        case 'H':
+                            cell.setType(CellType.HEART);
+                            new Heart(cell);
+                            break;
                         default:
                             throw new RuntimeException("Unrecognized character: '" + line.charAt(x) + "'");
                     }

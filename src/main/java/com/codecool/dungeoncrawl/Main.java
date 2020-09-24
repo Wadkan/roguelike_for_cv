@@ -78,12 +78,16 @@ public class Main extends Application {
         pickUpInventoryItem = new Button("Pick up item");
         pickUpInventoryItem.setOnAction(actionEvent -> {
             Item itemToPickUp = this.map.getPlayer().getCell().getActor().getItem();
+            this.map.getPlayer().getCell().getActor().itemToPickUp = null;
             if (ifMoved) {
                 ifMoved = false;
                 inventory.addItemToInventory(itemToPickUp);
                 if (itemToPickUp.getTileName().equals("sword")) {
                     int playerDamage = this.map.getPlayer().getDamage();
                     this.map.getPlayer().setDamage(playerDamage + 1);
+                } else if (itemToPickUp.getTileName().equals("heart")) {
+                    int playerHealth = this.map.getPlayer().getHealth();
+                    this.map.getPlayer().setHealth(playerHealth + 2);
                 }
                 inventoryList.setText(inventory.getItemsList());
                 this.map.getPlayer().getCell().setType(CellType.FLOOR);     // remove the item after pick up
