@@ -17,17 +17,25 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 public class Main extends Application {
+    // initial level
+    int level = 1;
+
     GameMap map1 = MapLoader.loadMap("/map1.txt");
     GameMap map2 = MapLoader.loadMap("/map2.txt");
     GameMap map3 = MapLoader.loadMap("/map3.txt");
     GameMap winner = MapLoader.loadMap("/mapWinner.txt");
-    int level = 1;
+
+    // initial map
     GameMap map = map1;
 
     // for map moving
+    /**
+     * rangeY and rangeX that show the screen
+     */
+    int rangeX = 18;
+    int rangeY = 18;
     int showFromX = this.map.getPlayer().getX();
     int showFromY = this.map.getPlayer().getY();
-    int rangeY = 10;
     int playerX = this.map.getPlayer().getX();
     int playerY = this.map.getPlayer().getY();
 
@@ -103,49 +111,65 @@ public class Main extends Application {
     private void onKeyPressed(KeyEvent keyEvent) {
         // moving the map
         playerX = this.map.getPlayer().getX();
+        System.out.println("x: " + playerX);
         playerY = this.map.getPlayer().getY();
+        System.out.println("y: " + playerY);
 
         ifMoved = true;
         switch (keyEvent.getCode()) {
             case UP:
                 map.getPlayer().move(0, -1);
 
-                if (rangeY / 2 < playerY && playerY < map.getHeight() - rangeY / 2 + 1) {
-                    showFromY--;
+                if (rangeY / 2 < playerY + 1 && playerY < map.getHeight() - rangeY / 2) {
+                    showFromY = playerY;
                 }
+
                 refresh();
                 break;
+
             case DOWN:
                 map.getPlayer().move(0, 1);
 
                 if (rangeY / 2 < playerY && playerY < map.getHeight() - rangeY / 2 + 1) {
-                    showFromY++;
+                    showFromY = playerY;
                 }
+
                 refresh();
                 break;
-
 
             case LEFT:
                 map.getPlayer().move(-1, 0);
+
+                if (rangeX / 2 < playerX + 1 && playerX < map.getWidth() - rangeX / 2) {
+                    showFromX = playerX;
+                }
+
                 refresh();
                 break;
+
             case RIGHT:
                 map.getPlayer().move(1, 0);
+
+                if (rangeX / 2 < playerX && playerX < map.getWidth() - rangeX / 2 + 1) {
+                    showFromX = playerX;
+                }
+
                 refresh();
                 break;
         }
 
         System.out.println("----");
-        System.out.println("rangeY = " + rangeY);
-        System.out.println("playerY = " + playerY);
-        System.out.println("showFromY = " + showFromY);
-        System.out.println("mapHeight = " + (map.getHeight()));
+        System.out.println("rangeX = " + rangeX);
+        System.out.println("playerX = " + playerX);
+        System.out.println("showFromX = " + showFromX);
+        System.out.println("mapWidth = " + (map.getWidth()));
     }
 
     private void refresh() {
         if (this.map.getPlayer().getIfStepIntoTheDoor()) {  // TODO load the new track
             System.out.println("STEP OUT");
             this.level++;
+            /** get player coordinates, only when first step into a new map */
             showFromX = this.map.getPlayer().getX();
             showFromY = this.map.getPlayer().getY();
         }
@@ -161,8 +185,8 @@ public class Main extends Application {
             this.map = winner;
         }
 
-        int widthInPixel = map.getWidth() * Tiles.TILE_WIDTH;
-        int heightInPixel = (rangeY) * Tiles.TILE_WIDTH;
+        int widthInPixel = rangeX * Tiles.TILE_WIDTH;
+        int heightInPixel = rangeY * Tiles.TILE_WIDTH;
 
         canvas.setWidth(widthInPixel);
         canvas.setHeight(heightInPixel);
@@ -171,13 +195,14 @@ public class Main extends Application {
 
         context.setFill(Color.BLACK);
         context.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
+        /** move the map with showFromY and showFromX. They calculated in onKeyPressed method above */
         for (int x = 0; x < map.getWidth(); x++) {
             for (int y = 0; y < map.getHeight(); y++) {
                 Cell cell = map.getCell(x, y);
                 if (cell.getActor() != null) {
-                    Tiles.drawTile(context, cell.getActor(), x, y - showFromY + rangeY / 2);
+                    Tiles.drawTile(context, cell.getActor(), x - showFromX + rangeX / 2, y - showFromY + rangeY / 2);
                 } else {
-                    Tiles.drawTile(context, cell, x, y - showFromY + rangeY / 2);
+                    Tiles.drawTile(context, cell, x - showFromX + rangeX / 2, y - showFromY + rangeY / 2);
                 }
             }
         }

@@ -20,9 +20,11 @@ public abstract class Actor implements Drawable {
 
     public void move(int dx, int dy) {
         Cell nextCell = cell.getNeighbor(dx, dy);
+        System.out.println(nextCell.getTileName());
         String tileName = "";
         actualItem = null;
         player = cell.getActor();
+
 
         try {
             // check tile name: skeleton, sword, key...
@@ -50,11 +52,11 @@ public abstract class Actor implements Drawable {
                 cell.setActor(null);
                 System.out.println("GAME OVER");
             }
-        } else if (tileName.equals("sword") || tileName.equals("key")) {   // if tile is an item (sward, key...): CAN PUT IT TODO put an item
-//            System.out.println(tileName);
         }
+//        else if (tileName.equals("sword") || tileName.equals("key")) {   // if tile is an item (sward, key...): CAN PUT IT TODO put an item
+//            System.out.println(tileName);
+//        }
 
-//        System.out.println(nextCellTitle);
         if (nextCellTitle.equals("openedDoor") || nextCellTitle.equals("stairs")) {
             ifStepIntoTheDoor = true;
             System.out.println("NEW MAP");
