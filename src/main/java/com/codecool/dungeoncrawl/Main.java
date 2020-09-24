@@ -2,7 +2,6 @@ package com.codecool.dungeoncrawl;
 
 import com.codecool.dungeoncrawl.logic.*;
 import com.codecool.dungeoncrawl.logic.actors.Item;
-import com.codecool.dungeoncrawl.logic.actors.Key;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -21,7 +20,7 @@ public class Main extends Application {
     GameMap map1 = MapLoader.loadMap("/map1.txt");
     GameMap map2 = MapLoader.loadMap("/map2.txt");
     GameMap map3 = MapLoader.loadMap("/map3.txt");
-    GameMap winner = MapLoader.loadMap("/winner.txt");
+    GameMap winner = MapLoader.loadMap("/mapWinner.txt");
     int level = 1;
     GameMap map = map1;
 
@@ -126,6 +125,9 @@ public class Main extends Application {
             this.map = map1;
         } else if (this.level == 2) {
             this.map = map2;
+            this.canvas.setHeight(map.getHeight() * Tiles.TILE_WIDTH);
+            this.canvas.setWidth(map.getWidth() * Tiles.TILE_WIDTH);
+            this.context = canvas.getGraphicsContext2D();
         } else if (this.level == 3) {
             this.map = map3;
         } else if (this.level > 3) {
