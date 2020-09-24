@@ -20,7 +20,6 @@ public abstract class Actor implements Drawable {
 
     public void move(int dx, int dy) {
         Cell nextCell = cell.getNeighbor(dx, dy);
-        System.out.println(nextCell.getTileName());
         String tileName = "";
         actualItem = null;
         player = cell.getActor();
@@ -53,9 +52,6 @@ public abstract class Actor implements Drawable {
                 System.out.println("GAME OVER");
             }
         }
-//        else if (tileName.equals("sword") || tileName.equals("key")) {   // if tile is an item (sward, key...): CAN PUT IT TODO put an item
-//            System.out.println(tileName);
-//        }
 
         if (nextCellTitle.equals("openedDoor") || nextCellTitle.equals("stairs")) {
             ifStepIntoTheDoor = true;

@@ -19,6 +19,7 @@ import javafx.stage.Stage;
 public class Main extends Application {
     // initial level
     int level = 1;
+    boolean ifFirstTrack = true;
 
     GameMap map1 = MapLoader.loadMap("/map1.txt");
     GameMap map2 = MapLoader.loadMap("/map2.txt");
@@ -34,10 +35,12 @@ public class Main extends Application {
      */
     int rangeX = 18;
     int rangeY = 18;
-    int showFromX = this.map.getPlayer().getX();
-    int showFromY = this.map.getPlayer().getY();
+
     int playerX = this.map.getPlayer().getX();
     int playerY = this.map.getPlayer().getY();
+
+    int xShift;
+    int yShift;
 
     int[] doorPoz;
     Inventory inventory = new Inventory();
@@ -111,9 +114,7 @@ public class Main extends Application {
     private void onKeyPressed(KeyEvent keyEvent) {
         // moving the map
         playerX = this.map.getPlayer().getX();
-        System.out.println("x: " + playerX);
         playerY = this.map.getPlayer().getY();
-        System.out.println("y: " + playerY);
 
         ifMoved = true;
         switch (keyEvent.getCode()) {
@@ -121,7 +122,7 @@ public class Main extends Application {
                 map.getPlayer().move(0, -1);
 
                 if (rangeY / 2 < playerY + 1 && playerY < map.getHeight() - rangeY / 2) {
-                    showFromY = playerY;
+                    yShift = playerY - rangeY / 2;
                 }
 
                 refresh();
@@ -131,7 +132,7 @@ public class Main extends Application {
                 map.getPlayer().move(0, 1);
 
                 if (rangeY / 2 < playerY && playerY < map.getHeight() - rangeY / 2 + 1) {
-                    showFromY = playerY;
+                    yShift = playerY - rangeY / 2;
                 }
 
                 refresh();
@@ -141,7 +142,7 @@ public class Main extends Application {
                 map.getPlayer().move(-1, 0);
 
                 if (rangeX / 2 < playerX + 1 && playerX < map.getWidth() - rangeX / 2) {
-                    showFromX = playerX;
+                    xShift = playerX - rangeX / 2;
                 }
 
                 refresh();
@@ -151,27 +152,42 @@ public class Main extends Application {
                 map.getPlayer().move(1, 0);
 
                 if (rangeX / 2 < playerX && playerX < map.getWidth() - rangeX / 2 + 1) {
-                    showFromX = playerX;
+                    xShift = playerX - rangeX / 2;
                 }
 
                 refresh();
                 break;
         }
+    }
 
-        System.out.println("----");
-        System.out.println("rangeX = " + rangeX);
-        System.out.println("playerX = " + playerX);
-        System.out.println("showFromX = " + showFromX);
-        System.out.println("mapWidth = " + (map.getWidth()));
+    private void getFirstMapPoz() {
+        ifFirstTrack = false;
+        System.out.println("track set");
+
+        if (playerX - rangeX / 2 < 1) {
+            xShift = 0;
+        } else if (playerX - rangeX / 2 >= this.map.getWidth()) {
+        } else {
+            xShift = map.getWidth() - rangeX;
+        }
+
+        if (playerY - rangeY / 2 < 1) {
+            yShift = 0;
+        } else if (playerY - rangeY / 2 >= this.map.getHeight()) {
+        } else {
+            yShift = map.getHeight() - rangeY;
+        }
     }
 
     private void refresh() {
-        if (this.map.getPlayer().getIfStepIntoTheDoor()) {  // TODO load the new track
+        if (this.map.getPlayer().getIfStepIntoTheDoor()) {
             System.out.println("STEP OUT");
             this.level++;
+            ifFirstTrack = true;
             /** get player coordinates, only when first step into a new map */
-            showFromX = this.map.getPlayer().getX();
-            showFromY = this.map.getPlayer().getY();
+        }
+        if (ifFirstTrack) {
+            this.getFirstMapPoz();
         }
 
         if (this.level == 1) {
@@ -185,24 +201,22 @@ public class Main extends Application {
             this.map = winner;
         }
 
-        int widthInPixel = rangeX * Tiles.TILE_WIDTH;
-        int heightInPixel = rangeY * Tiles.TILE_WIDTH;
-
-        canvas.setWidth(widthInPixel);
-        canvas.setHeight(heightInPixel);
+        canvas.setWidth(rangeX * Tiles.TILE_WIDTH);
+        canvas.setHeight(rangeY * Tiles.TILE_WIDTH);
 
 //        this.context = canvas.getGraphicsContext2D();
 
         context.setFill(Color.BLACK);
         context.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
         /** move the map with showFromY and showFromX. They calculated in onKeyPressed method above */
+
         for (int x = 0; x < map.getWidth(); x++) {
             for (int y = 0; y < map.getHeight(); y++) {
                 Cell cell = map.getCell(x, y);
                 if (cell.getActor() != null) {
-                    Tiles.drawTile(context, cell.getActor(), x - showFromX + rangeX / 2, y - showFromY + rangeY / 2);
+                    Tiles.drawTile(context, cell.getActor(), x - xShift, y - yShift);
                 } else {
-                    Tiles.drawTile(context, cell, x - showFromX + rangeX / 2, y - showFromY + rangeY / 2);
+                    Tiles.drawTile(context, cell, x - xShift, y - yShift);
                 }
             }
         }
