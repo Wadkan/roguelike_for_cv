@@ -2,6 +2,8 @@ package com.codecool.dungeoncrawl;
 
 import com.codecool.dungeoncrawl.logic.*;
 import com.codecool.dungeoncrawl.logic.actors.Item;
+import com.codecool.dungeoncrawl.logic.actors.Key;
+import com.codecool.dungeoncrawl.logic.actors.Skeleton;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -121,6 +123,14 @@ public class Main extends Application {
         playerY = this.map.getPlayer().getY();
 
         ifMoved = true;
+        try {
+            map.getSkeletons().forEach(skeleton -> {
+                if (skeleton.getHealth() <= 0) {
+                    map.removeSkeleton(skeleton);
+                }
+            });
+            map.getSkeletons().forEach(Skeleton::randomMove);
+        } catch (Exception ignored) {}
         switch (keyEvent.getCode()) {
             case UP:
                 map.getPlayer().move(0, -1);

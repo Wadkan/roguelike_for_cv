@@ -6,7 +6,7 @@ public class Bat extends Actor {
 
     public Bat(Cell cell) {
         super(cell);
-        setHealth(5);
+        setHealth(6);
         setDamage(1);
     }
 
