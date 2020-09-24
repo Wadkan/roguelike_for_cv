@@ -36,7 +36,7 @@ public abstract class Actor implements Drawable {
         // if tile is a wall, do not move
         String nextCellTitle = nextCell.getTileName();
 
-        if (nextCellTitle.equals("sword") || nextCellTitle.equals("heart")) {
+        if (nextCellTitle.equals("sword") || nextCellTitle.equals("heart") || nextCellTitle.equals("key")) {
             itemToPickUp = nextCell.getActor();
             System.out.println("kuki " + itemToPickUp);
             cell.setActor(null);
