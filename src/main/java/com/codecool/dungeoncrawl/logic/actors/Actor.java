@@ -60,7 +60,7 @@ public abstract class Actor implements Drawable {
 
 
         if (tileName.equals("skeleton") || tileName.equals("bat")) {   // if tile is a skeleton: FIGHT
-            Attack a = new Attack(player, actualItem);
+            Attack a = new Attack(this, actualItem);
             a.fight();
             if (a.getWinner() == player) {
                 cell.setActor(null);
