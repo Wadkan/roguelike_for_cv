@@ -24,7 +24,7 @@ public class Skeleton extends Actor {
         Random r = new Random();
         int dx = 0;
         int dy = 0;
-        int direction = r.nextInt(4);
+        int direction = r.nextInt(6);
         switch (direction) {
             case 0:
                 dx = 1;
@@ -38,12 +38,22 @@ public class Skeleton extends Actor {
             case 3:
                 dy = 1;
                 break;
+            case 4:
+            case 5:
+                break;
         }
         Cell nextCell = cell.getNeighbor(dx, dy);
+        
+        String tileName = "";
+
+        try {
+            tileName = nextCell.getActor().getTileName();
+        } catch (Exception ignored) {
+        }
 
         String nextCellTitle = nextCell.getTileName();
 
-        if (nextCellTitle.equals("floor")) {
+        if (!nextCellTitle.equals("wall") && !nextCellTitle.equals("closedDoor") && !tileName.equals("bat")) {
             cell.setActor(null);
             nextCell.setActor(this);
             cell = nextCell;

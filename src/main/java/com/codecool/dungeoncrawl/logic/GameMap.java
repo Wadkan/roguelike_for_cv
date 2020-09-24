@@ -4,6 +4,9 @@ import com.codecool.dungeoncrawl.logic.actors.Actor;
 import com.codecool.dungeoncrawl.logic.actors.Player;
 import com.codecool.dungeoncrawl.logic.actors.Skeleton;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class GameMap {
     private int width;
     private int height;
@@ -11,7 +14,7 @@ public class GameMap {
 
     private Player player;
     private int[] doorPosition;
-    private Skeleton skeleton;
+    private ArrayList<Skeleton> skeletonList = new ArrayList<Skeleton>();
 
     public GameMap(int width, int height, CellType defaultCellType) {
         this.width = width;
@@ -53,10 +56,14 @@ public class GameMap {
     }
 
     public void setSkeleton(Skeleton skeleton) {
-        this.skeleton = skeleton;
+        this.skeletonList.add(skeleton);
     }
 
-    public Skeleton getSkeleton() {
-        return this.skeleton;
+    public ArrayList<Skeleton> getSkeletons() {
+        return this.skeletonList;
+    }
+
+    public void removeSkeleton(Skeleton skeleton) {
+        this.skeletonList.remove(skeleton);
     }
 }

@@ -57,6 +57,9 @@ public abstract class Actor implements Drawable {
             cell = nextCell;
         }
 
+        System.out.println(tileName);
+        System.out.println(nextCellTitle);
+
         if (tileName.equals("skeleton") || tileName.equals("bat")) {   // if tile is a skeleton: FIGHT TODO: implement fight
             Attack a = new Attack(player, actualItem);
             a.fight();
