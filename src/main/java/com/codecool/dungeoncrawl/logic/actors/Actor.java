@@ -38,14 +38,12 @@ public abstract class Actor implements Drawable {
 
         if (nextCellTitle.equals("sword") || nextCellTitle.equals("heart") || nextCellTitle.equals("key")) {
             itemToPickUp = nextCell.getActor();
-            System.out.println("kuki " + itemToPickUp);
             cell.setActor(null);
             nextCell.setActor(this);
             cell = nextCell;
         }
 
         if (nextCellTitle.equals("floor")) {
-            System.out.println("kaki " + itemToPickUp);
             cell.setActor(itemToPickUp);
             nextCell.setActor(this);
             cell = nextCell;
