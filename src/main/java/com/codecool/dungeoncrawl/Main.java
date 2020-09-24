@@ -94,6 +94,7 @@ public class Main extends Application {
 
     private void onKeyPressed(KeyEvent keyEvent) {
         ifMoved = true;
+        map.getSkeleton().randomMove();
         switch (keyEvent.getCode()) {
             case UP:
                 map.getPlayer().move(0, -1);
