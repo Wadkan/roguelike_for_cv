@@ -19,7 +19,31 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 public class Main extends Application {
-    GameMap map = MapLoader.loadMap();
+    // initial level
+    int level = 1;
+    boolean ifFirstTrack = true;
+
+    GameMap map1 = MapLoader.loadMap("/map1.txt");
+    GameMap map2 = MapLoader.loadMap("/map2.txt");
+    GameMap map3 = MapLoader.loadMap("/map3.txt");
+    GameMap winner = MapLoader.loadMap("/mapWinner.txt");
+
+    // initial map
+    GameMap map = map1;
+
+    // for map moving
+    /**
+     * rangeY and rangeX that show the screen
+     */
+    int rangeX = 18;
+    int rangeY = 18;
+
+    int playerX = this.map.getPlayer().getX();
+    int playerY = this.map.getPlayer().getY();
+
+    int xShift;
+    int yShift;
+
     int[] doorPoz;
     Inventory inventory = new Inventory();
     boolean ifMoved = false;
@@ -94,6 +118,10 @@ public class Main extends Application {
     }
 
     private void onKeyPressed(KeyEvent keyEvent) {
+        // moving the map
+        playerX = this.map.getPlayer().getX();
+        playerY = this.map.getPlayer().getY();
+
         ifMoved = true;
         try {
             map.getSkeletons().forEach(skeleton -> {
@@ -106,43 +134,108 @@ public class Main extends Application {
         switch (keyEvent.getCode()) {
             case UP:
                 map.getPlayer().move(0, -1);
+
+                if (rangeY / 2 < playerY + 1 && playerY < map.getHeight() - rangeY / 2) {
+                    yShift = playerY - rangeY / 2;
+                }
+
                 refresh();
                 break;
+
             case DOWN:
                 map.getPlayer().move(0, 1);
+
+                if (rangeY / 2 < playerY && playerY < map.getHeight() - rangeY / 2 + 1) {
+                    yShift = playerY - rangeY / 2;
+                }
+
                 refresh();
                 break;
+
             case LEFT:
                 map.getPlayer().move(-1, 0);
+
+                if (rangeX / 2 < playerX + 1 && playerX < map.getWidth() - rangeX / 2) {
+                    xShift = playerX - rangeX / 2;
+                }
+
                 refresh();
                 break;
+
             case RIGHT:
                 map.getPlayer().move(1, 0);
+
+                if (rangeX / 2 < playerX && playerX < map.getWidth() - rangeX / 2 + 1) {
+                    xShift = playerX - rangeX / 2;
+                }
+
                 refresh();
                 break;
         }
     }
 
+    private void getFirstMapPoz() {
+        ifFirstTrack = false;
+        System.out.println("track set");
+
+        if (playerX - rangeX / 2 < 1) {
+            xShift = 0;
+        } else if (playerX - rangeX / 2 >= this.map.getWidth()) {
+        } else {
+            xShift = map.getWidth() - rangeX;
+        }
+
+        if (playerY - rangeY / 2 < 1) {
+            yShift = 0;
+        } else if (playerY - rangeY / 2 >= this.map.getHeight()) {
+        } else {
+            yShift = map.getHeight() - rangeY;
+        }
+    }
+
     private void refresh() {
+        if (this.map.getPlayer().getIfStepIntoTheDoor()) {
+            System.out.println("STEP OUT");
+            this.level++;
+            ifFirstTrack = true;
+            /** get player coordinates, only when first step into a new map */
+        }
+        if (ifFirstTrack) {
+            this.getFirstMapPoz();
+        }
+
+        if (this.level == 1) {
+            this.map = map1;
+        } else if (this.level == 2) {
+            this.map = map2;
+        } else if (this.level == 3) {
+            this.map = map3;
+        } else if (this.level > 3) {
+            System.out.println("WINNER");
+            this.map = winner;
+        }
+
+        canvas.setWidth(rangeX * Tiles.TILE_WIDTH);
+        canvas.setHeight(rangeY * Tiles.TILE_WIDTH);
+
+//        this.context = canvas.getGraphicsContext2D();
+
         context.setFill(Color.BLACK);
         context.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
+        /** move the map with showFromY and showFromX. They calculated in onKeyPressed method above */
+
         for (int x = 0; x < map.getWidth(); x++) {
             for (int y = 0; y < map.getHeight(); y++) {
                 Cell cell = map.getCell(x, y);
                 if (cell.getActor() != null) {
-                    Tiles.drawTile(context, cell.getActor(), x, y);
+                    Tiles.drawTile(context, cell.getActor(), x - xShift, y - yShift);
                 } else {
-                    Tiles.drawTile(context, cell, x, y);
+                    Tiles.drawTile(context, cell, x - xShift, y - yShift);
                 }
             }
         }
         healthLabel.setText("" + map.getPlayer().getHealth());
         inventoryLabel.setText("" + inventory.getItemsNumber());
         totalDamage.setText("" + map.getPlayer().getDamage());
-
-
-        if (this.map.getPlayer().getIfStepIntoTheDoor()) {  // TODO load the new track
-            System.out.println("STEP OUT");
-        }
     }
 }
