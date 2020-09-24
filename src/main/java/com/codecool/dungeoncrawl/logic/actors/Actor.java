@@ -26,6 +26,7 @@ public abstract class Actor implements Drawable {
         actualItem = null;
         player = cell.getActor();
 
+
         try {
             // check tile name: skeleton, sword, key...
             tileName = nextCell.getActor().getTileName();
@@ -68,11 +69,9 @@ public abstract class Actor implements Drawable {
                 cell.setActor(null);
                 System.out.println("GAME OVER");
             }
-        } else if (tileName.equals("sword") || tileName.equals("key")) {   // if tile is an item (sward, key...): CAN PUT IT TODO put an item
-            System.out.println(tileName);
         }
 
-        if (nextCellTitle.equals("openedDoor")) {
+        if (nextCellTitle.equals("openedDoor") || nextCellTitle.equals("stairs")) {
             ifStepIntoTheDoor = true;
             System.out.println("NEW MAP");
         }
