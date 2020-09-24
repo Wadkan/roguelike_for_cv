@@ -55,6 +55,7 @@ public class Main extends Application {
         pickUpInventoryItem = new Button("Pick up item");
         pickUpInventoryItem.setOnAction(actionEvent -> {
             Item itemToPickUp = this.map.getPlayer().getCell().getActor().getItem();
+            this.map.getPlayer().getCell().getActor().itemToPickUp = null;
             if (ifMoved) {
                 ifMoved = false;
                 inventory.addItemToInventory(itemToPickUp);

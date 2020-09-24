@@ -18,6 +18,8 @@ public abstract class Actor implements Drawable {
         this.cell.setActor(this);
     }
 
+    public Actor itemToPickUp;
+
     public void move(int dx, int dy) {
         Cell nextCell = cell.getNeighbor(dx, dy);
         String tileName = "";
@@ -33,6 +35,24 @@ public abstract class Actor implements Drawable {
 
         // if tile is a wall, do not move
         String nextCellTitle = nextCell.getTileName();
+
+        if (nextCellTitle.equals("sword") || nextCellTitle.equals("heart") || nextCellTitle.equals("key")) {
+            itemToPickUp = nextCell.getActor();
+            System.out.println("kuki " + itemToPickUp);
+            cell.setActor(null);
+            nextCell.setActor(this);
+            cell = nextCell;
+        }
+
+        if (nextCellTitle.equals("floor")) {
+            System.out.println("kaki " + itemToPickUp);
+            cell.setActor(itemToPickUp);
+            nextCell.setActor(this);
+            cell = nextCell;
+            itemToPickUp = null;
+        }
+
+
         if (!nextCellTitle.equals("wall") && !nextCellTitle.equals("closedDoor") && !tileName.equals("skeleton")) {
             cell.setActor(null);
             nextCell.setActor(this);
