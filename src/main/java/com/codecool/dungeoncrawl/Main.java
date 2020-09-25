@@ -2,7 +2,6 @@ package com.codecool.dungeoncrawl;
 
 import com.codecool.dungeoncrawl.logic.*;
 import com.codecool.dungeoncrawl.logic.actors.Item;
-import com.codecool.dungeoncrawl.logic.actors.Key;
 import com.codecool.dungeoncrawl.logic.actors.Skeleton;
 import javafx.application.Application;
 import javafx.geometry.Insets;
@@ -26,7 +25,7 @@ public class Main extends Application {
     GameMap map1 = MapLoader.loadMap("/map1.txt");
     GameMap map2 = MapLoader.loadMap("/map2.txt");
     GameMap map3 = MapLoader.loadMap("/map3.txt");
-    GameMap winner = MapLoader.loadMap("/mapWinner.txt");
+    GameMap mapWinner = MapLoader.loadMap("/mapWinner.txt");
 
     // initial map
     GameMap map = map1;
@@ -130,7 +129,8 @@ public class Main extends Application {
                 }
             });
             map.getSkeletons().forEach(Skeleton::randomMove);
-        } catch (Exception ignored) {}
+        } catch (Exception ignored) {
+        }
         switch (keyEvent.getCode()) {
             case UP:
                 map.getPlayer().move(0, -1);
@@ -211,8 +211,11 @@ public class Main extends Application {
         } else if (this.level == 3) {
             this.map = map3;
         } else if (this.level > 3) {
-            System.out.println("WINNER");
-            this.map = winner;
+            this.map = mapWinner;
+            rangeX = this.map.getWidth();
+            rangeY = this.map.getHeight();
+            xShift = 0;
+            yShift = 0;
         }
 
         canvas.setWidth(rangeX * Tiles.TILE_WIDTH);
@@ -222,8 +225,8 @@ public class Main extends Application {
 
         context.setFill(Color.BLACK);
         context.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
-        /** move the map with showFromY and showFromX. They calculated in onKeyPressed method above */
 
+        /** change yShift after move */
         for (int x = 0; x < map.getWidth(); x++) {
             for (int y = 0; y < map.getHeight(); y++) {
                 Cell cell = map.getCell(x, y);

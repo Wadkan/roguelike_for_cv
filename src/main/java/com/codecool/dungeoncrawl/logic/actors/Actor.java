@@ -26,7 +26,6 @@ public abstract class Actor implements Drawable {
         actualItem = null;
         player = cell.getActor();
 
-
         try {
             // check tile name: skeleton, sword, key...
             tileName = nextCell.getActor().getTileName();
@@ -34,7 +33,6 @@ public abstract class Actor implements Drawable {
         } catch (Exception ignored) {
         }
 
-        // if tile is a wall, do not move
         String nextCellTitle = nextCell.getTileName();
 
         if (nextCellTitle.equals("sword") || nextCellTitle.equals("heart") || nextCellTitle.equals("key")) {
@@ -51,13 +49,12 @@ public abstract class Actor implements Drawable {
             itemToPickUp = null;
         }
 
-
+        // if tile is a wall, do not move
         if (!nextCellTitle.equals("wall") && !nextCellTitle.equals("closedDoor") && !tileName.equals("skeleton")) {
             cell.setActor(null);
             nextCell.setActor(this);
             cell = nextCell;
         }
-
 
         if (tileName.equals("skeleton") || tileName.equals("bat")) {   // if tile is a skeleton: FIGHT
             Attack a = new Attack(this, actualItem);
