@@ -53,7 +53,7 @@ public class Skeleton extends Actor {
 
         String nextCellTitle = nextCell.getTileName();
 
-        if (!nextCellTitle.equals("wall") && !nextCellTitle.equals("closedDoor") && !tileName.equals("bat") && !nextCellTitle.equals("sword") && !nextCellTitle.equals("heart")) {
+        if (!nextCellTitle.equals("wall") && !nextCellTitle.equals("closedDoor") && !tileName.equals("bat") && !nextCellTitle.equals("sword") && !nextCellTitle.equals("heart") && !nextCellTitle.equals("key")) {
             cell.setActor(null);
             nextCell.setActor(this);
             cell = nextCell;
