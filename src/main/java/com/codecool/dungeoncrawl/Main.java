@@ -1,7 +1,9 @@
 package com.codecool.dungeoncrawl;
 
+import com.codecool.dungeoncrawl.dao.GameDatabaseManager;
 import com.codecool.dungeoncrawl.logic.*;
 import com.codecool.dungeoncrawl.logic.actors.Item;
+import com.codecool.dungeoncrawl.logic.actors.Player;
 import com.codecool.dungeoncrawl.logic.actors.Skeleton;
 import javafx.application.Application;
 import javafx.geometry.Insets;
@@ -10,12 +12,20 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
+import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import com.codecool.dungeoncrawl.logic.Cell;
+import com.codecool.dungeoncrawl.logic.GameMap;
+import com.codecool.dungeoncrawl.logic.MapLoader;
+
+import java.sql.SQLException;
 
 public class Main extends Application {
     // initial level
@@ -56,12 +66,15 @@ public class Main extends Application {
     Button pickUpInventoryItem;
     Text totalDamage = new Text("" + map.getPlayer().getDamage());
 
+    GameDatabaseManager dbManager;  // TODO ok
+
     public static void main(String[] args) {
         launch(args);
     }
 
     @Override
     public void start(Stage primaryStage) {
+        setupDbManager();   // TODO ok
         GridPane ui = new GridPane();
         ui.setPrefWidth(200);
         ui.setPadding(new Insets(10));
@@ -110,10 +123,21 @@ public class Main extends Application {
         refresh();
 
         scene.setOnKeyPressed(this::onKeyPressed);
+        scene.setOnKeyReleased(this::onKeyReleased);    // TODO ok
 
         primaryStage.setTitle("Dungeon Crawl");
         primaryStage.show();
         borderPane.requestFocus();
+    }
+
+    private void onKeyReleased(KeyEvent keyEvent) {     // TODO ok
+        KeyCombination exitCombinationMac = new KeyCodeCombination(KeyCode.W, KeyCombination.SHORTCUT_DOWN);
+        KeyCombination exitCombinationWin = new KeyCodeCombination(KeyCode.F4, KeyCombination.ALT_DOWN);
+        if (exitCombinationMac.match(keyEvent)
+                || exitCombinationWin.match(keyEvent)
+                || keyEvent.getCode() == KeyCode.ESCAPE) {
+            exit();
+        }
     }
 
     private void onKeyPressed(KeyEvent keyEvent) {
@@ -170,6 +194,10 @@ public class Main extends Application {
                 }
 
                 refresh();
+                break;
+            case S:     // TODO ok
+                Player player = map.getPlayer();
+                dbManager.savePlayer(player);
                 break;
         }
     }
@@ -240,5 +268,23 @@ public class Main extends Application {
         healthLabel.setText("" + map.getPlayer().getHealth());
         inventoryLabel.setText("" + inventory.getItemsNumber());
         totalDamage.setText("" + map.getPlayer().getDamage());
+    }
+
+    private void setupDbManager() {     // TODO ok
+        dbManager = new GameDatabaseManager();
+        try {
+            dbManager.setup();
+        } catch (SQLException ex) {
+            System.out.println("Cannot connect to database.");
+        }
+    }
+
+    private void exit() {     // TODO ok
+        try {
+            stop();
+        } catch (Exception e) {
+            System.exit(1);
+        }
+        System.exit(0);
     }
 }
